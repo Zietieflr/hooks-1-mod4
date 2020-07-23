@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useCounter, useToggler, useFetch } from './hooks'
+import Counter from './Counter'
 import './App.css';
 
 function App() {
 
-  const [count, setCount] = useState(0)
-  const countStep = (step) => setCount(count + step)
 
-  useEffect(() => {
-    let interval = setInterval(() => countStep(1), 1000)
-
-    return () => clearInterval(interval)
-  }, [count])
-  
+  const [count,,countStep] = useCounter(0)
+  const [isToggled, setIsToggled] = useToggler(false)
+  const {character, setCharacters} = useFetch([], 'https://rickandmortyapi.com/api/character/')
   return (
     <div className="App">
       <h1>Counter App</h1>
       <h2>{count}</h2>
       <button onClick={() => countStep(1)}>+</button>
       <button onClick={() => countStep(-1)}>-</button>
+      <button onClick={setIsToggled}>Toggle</button>
+      {isToggled ? <Counter /> : null}
     </div>
   );
 }
